@@ -11,11 +11,28 @@
   margin-bottom: 20px; /* ヘッダーの下の余白を調整 */
 }
 
+.game {
+  background-image: url('./icon.png'); /* 背景画像 */
+  background-size: cover; /* 画像のサイズ調整 */
+  width: 150px; /* コンテナの幅 */
+  height: 150px; /* コンテナの高さ */
+  margin-bottom: 0;
+  margin: 0 auto;
+}
+
+.caption {
+  font-size: x-small;
+  margin-top: 2px;
+  margin-bottom: 0;
+}
+
 .cc {
   font-size: x-small;
+  margin-bottom: 0;
 }
 
 .footer {
   margin-top: 20px;
   font-size: small;
+  margin-bottom: 0;
 }
