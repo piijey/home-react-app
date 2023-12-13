@@ -19,16 +19,17 @@ const Footer = () => (
   </>
   );
   
-const links = [
-  { id: 0, title: "@xiPJ", at: "X/Twitter", url: "https://twitter.com/xiPJ", icon: "bi bi-twitter" },
-  { id: 1, title: "PiiJey", at: "GitHub", url: "https://github.com/piijey", icon: "bi bi-github" },
-  { id: 2, title: "アイソモカ", at: "はてなブログ", url: "https://isomocha.hatenablog.com", icon: "bi bi-vector-pen" },
-];
 
 const ListLinks = () => {
+  const links = [
+    { id: 0, title: "@xiPJ", at: "X/Twitter", url: "https://twitter.com/xiPJ", icon: "bi bi-twitter-x" },
+    { id: 1, title: "PiiJey", at: "GitHub", url: "https://github.com/piijey", icon: "bi bi-github" },
+    { id: 2, title: "アイソモカ", at: "はてなブログ", url: "https://isomocha.hatenablog.com", icon: "bi bi-vector-pen" },
+  ];
+  
   const listLinks = links.map(link =>
     <div key={link.id}>
-      <a className="icon-link" href={link.url}>
+      <a className="icon-link" href={link.url} rel="me">
         <i className={link.icon}/>{link.title}
       </a>
     </div>
@@ -42,7 +43,7 @@ const ListLinks = () => {
 
 function SoundButton() {
   const [isPlaying, setIsPlaying] = useState(false);
-  const audioRef = useRef(new Audio('./572954__drinkingwindgames__chicks.wav'));
+  const audioRef = useRef(new Audio('./sound/572954__drinkingwindgames__chicks.wav'));
 
   function handleClick() {
     setIsPlaying(!isPlaying);
@@ -71,7 +72,7 @@ function SoundButton() {
 }
 
 function Square({value, onSquareClick}) {
-  const colors = ['transparent', '#FDB967', '#6B82B8', '#55BF76'];
+  const colors = ['transparent', '#FBBE30', '#C72C65', '#55C2B7']
   const bgColor = colors[value] || 'transparent';
   return (
   <button
@@ -84,7 +85,12 @@ function Square({value, onSquareClick}) {
 }
 
 function Board(){
-  const [squares, setSquares] = useState(Array.from({ length: 9 }, () => Math.floor(Math.random() * 4)));
+  const [squares, setSquares] = useState(initSquares());
+
+  function initSquares() {
+    // 0~3 の値をランダムに、9個生成
+    return Array.from({ length: 9 }, () => Math.floor(Math.random() * 4))
+  }
 
   function handleClick(i){
     const nextSquares = squares.slice();
@@ -95,12 +101,19 @@ function Board(){
     }
     setSquares(nextSquares);
   }
+
   useEffect(() => {
     const allZeros = squares.every(square => square === 0);
     if (allZeros) {
-      const audio = new Audio('./269198__mickleness__game-win.mp3');
+      let audio = new Audio('./sound/269198__mickleness__game-win.mp3');
       audio.play();
+      audio.onended = () => {
+        setSquares(initSquares())
+      }
+    return () => {
+      audio.onended = null;
     }
+    };
   }, [squares]);
 
   return (
