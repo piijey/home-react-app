@@ -16,13 +16,12 @@
   background-size: cover; /* 画像のサイズ調整 */
   width: 150px; /* コンテナの幅 */
   height: 150px; /* コンテナの高さ */
-  margin-bottom: 0;
   margin: 0 auto;
+  margin-bottom: 30px;
 }
 
 .caption {
   font-size: x-small;
-  margin-top: 2px;
   margin-bottom: 0;
 }
 
