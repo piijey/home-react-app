@@ -2,7 +2,10 @@ import React, { useState, useEffect, useRef } from 'react';
 import './App.css';
 import Button from 'react-bootstrap/Button';
 import Container from 'react-bootstrap/Container';
+import Stack from 'react-bootstrap/Stack';
+
 import 'bootstrap-icons/font/bootstrap-icons.css';
+import Form from 'react-bootstrap/Form';
 
 const Title = () => (
   <>
@@ -87,12 +90,13 @@ function Square({value, onSquareClick}) {
   );
 }
 
-let clickTime = 0;
 function Board(){
+  const clickTimeRef = useRef(0);
   const [squares, setSquares] = useState(initSquares());
   const prevSquareRef = useRef(squares); //前回の squares
   const [playAudio, setPlayAudio] = useState(false);
   const timeoutRef = useRef(null); //setTimeout の id
+  const soundOn = useRef(true);
 
   function initSquares() {
     // 0~3 の値（4未満の整数）をランダムに、9個生成
@@ -100,7 +104,7 @@ function Board(){
   }
 
   function handleClick(i){
-    clickTime += 1;
+    clickTimeRef.current += 1;
     const nextSquares = squares.slice();
     if (nextSquares[i] === 3){
       nextSquares[i] = 1;
@@ -112,7 +116,7 @@ function Board(){
 
   useEffect(() => {
     const changedIndex = hasBoardChanged()
-    if (changedIndex != -1){
+    if (changedIndex !== -1){
       clearAligned(changedIndex);
     }
     prevSquareRef.current = squares;
@@ -121,78 +125,116 @@ function Board(){
     if (allZeros && !playAudio) {
       setPlayAudio(true);
     };
-  }, [squares]);
+
+    function hasBoardChanged(){
+      for (let i = 0; i < squares.length; i++) {
+        if (squares[i] !== prevSquareRef.current[i]) {
+          return i //変化した（クリックされた）インデックスを返す
+        }
+      }
+      return -1; //変化がない場合
+    }
+
+    function clearAligned(changedIndex) {
+      let detected = false;
+      //縦横斜めのいずれかが揃ったら、値を 0 にする
+      const lines = [
+        [0, 1, 2],
+        [3, 4, 5],
+        [6, 7, 8],
+        [0, 3, 6],
+        [1, 4, 7],
+        [2, 5, 8],
+        [0, 4, 8],
+        [2, 4, 6]
+      ];
+      const linesToCheck = lines.filter(line => line.includes(changedIndex))
+      const nextSquares = squares.slice();
+      for (let i = 0; i<linesToCheck.length; i++) {
+        const [a, b, c] = linesToCheck[i];
+        if (squares[a] !== 0 && squares[a] === squares[b] && squares[a] === squares[c] ) {
+          detected = true;
+          nextSquares[a] = 0;
+          nextSquares[b] = 0;
+          nextSquares[c] = 0;
+        }
+      }
+      if (detected){
+        if (timeoutRef.current) {
+          clearTimeout(timeoutRef.current);
+        }
+        timeoutRef.current = setTimeout(() => {
+          setSquares(nextSquares)
+          timeoutRef.current = null;
+        }, 400);
+      }
+    };
+  }, [squares, playAudio]);
 
   useEffect(() => {
     if (playAudio) {
       let audio = new Audio('./sound/269198__mickleness__game-win.mp3');
+      if (!soundOn.current) {
+        audio.volume = 0;
+      };
       audio.play();
       audio.onended = () => {
         setSquares(initSquares())
-        clickTime = 0;
+        clickTimeRef.current = 0;
         setPlayAudio(false);
       }
       return () => {
         audio.onended = null;
       }
-    };
+  };
   }, [playAudio]);
 
-  function hasBoardChanged(){
-    for (let i = 0; i < squares.length; i++) {
-      if (squares[i] !== prevSquareRef.current[i]) {
-        return i //変化した（クリックされた）インデックスを返す
-      }
-    }
-    return -1; //変化がない場合
+  function SwitchSound() {
+    const handleSwitchChange = (event) => {
+      soundOn.current = event.target.checked;
+      console.log("スイッチが切り替わりました。現在の状態: ", soundOn.current);
+      // ここで必要な処理を追加する
+    };
+  
+    return (
+      <>
+      <Container>
+        <Stack direction="horizontal" gap={1}>
+          <span xxs="true"><i className="bi bi-volume-mute"/></span>
+          <span xxs="true">
+            <Form>
+              <Form.Check 
+                type="switch"
+                id="custom-switch" 
+                aria-label="sound switch"
+                defaultChecked={soundOn.current}
+                onClick={handleSwitchChange}
+              />
+            </Form>
+          </span>
+          <span xxs="true" ><i className="bi bi-volume-down" /></span>
+        </Stack>
+      </Container>
+    </>
+    );
   }
-
-  function clearAligned(changedIndex) {
-    let detected = false;
-    //縦横斜めのいずれかが揃ったら、値を 0 にする
-    const lines = [
-      [0, 1, 2],
-      [3, 4, 5],
-      [6, 7, 8],
-      [0, 3, 6],
-      [1, 4, 7],
-      [2, 5, 8],
-      [0, 4, 8],
-      [2, 4, 6]
-    ];
-    const linesToCheck = lines.filter(line => line.includes(changedIndex))
-    const nextSquares = squares.slice();
-    for (let i = 0; i<linesToCheck.length; i++) {
-      const [a, b, c] = linesToCheck[i];
-      if (squares[a] != 0 && squares[a] === squares[b] && squares[a] === squares[c] ) {
-        detected = true;
-        nextSquares[a] = 0;
-        nextSquares[b] = 0;
-        nextSquares[c] = 0;
-      }
-    }
-    if (detected){
-      if (timeoutRef.current) {
-        clearTimeout(timeoutRef.current);
-      }
-      timeoutRef.current = setTimeout(() => {
-        setSquares(nextSquares)
-        timeoutRef.current = null;
-      }, 400);
-    }
-  };
 
   return (
   <>
+  <div className='game'>
     <div className="board-container">
       {[...Array(9)].map((_, index) => (
         <Square key={index} value={squares[index]} onSquareClick={() => handleClick(index)} />
       ))}
     </div>
+    </div>
     <p className="caption">
       {playAudio ? "おめでとう！" : "カラータイルをクリック！"}<br/>
-      クリックした回数: {clickTime}
+      クリックした回数: {clickTimeRef.current}
     </p>
+    <div className="gamesoundswitch">
+      <SwitchSound/>
+    </div>
   </>
   )
 }
@@ -209,9 +251,7 @@ const App = () => (
       </Container>
     </div>
     <div className="card text-bg-light p-2 mb-2" style={{width: '18rem'}}>
-      <div className="game">
         <Board />
-      </div>
     </div>
     <div className="card text-bg-light" style={{width: '18rem'}}>
       <div className="card-body">
