@@ -7,9 +7,9 @@
 
 ## Board
 ちっちゃいゲームです。
-四角いボタンを押すたびに `value` が 0~3 の間で1ずつ増加します。すべてのマスの `value` が0に揃ったら、音を鳴らします。
+3x3のマス（ボタン）には、0~3 の値 (`value`、色に相当) が割り当てられ、ボタンをクリックすると値が1ずつ増加します。縦・横・斜めいずれかのボタンの値が揃ったら、ボタンが透明 (`value = 0`) に変化します。すべてのボタンが透明になったら、音を鳴らします。
 
-ボタンのクリック操作や色は `Square` 関数で、盤面の配置や状態管理などは `Board` 関数で行っています。[チュートリアル：三目並べ – React](https://ja.react.dev/learn/tutorial-tic-tac-toe) を参考にしました。
+ボタンのクリック操作や色は `Square` 関数で、盤面の配置や状態管理などは `Board` 関数で行っています。Reactの [チュートリアル：三目並べ](https://ja.react.dev/learn/tutorial-tic-tac-toe) を参考にしました。
 
 ## その他
-ボタンやコンテナ、アイコンには [Bootstrap](https://getbootstrap.jp/) を使っています。
+ボタンやコンテナには [Bootstrap](https://getbootstrap.jp/)、アイコンには [React Icons](https://react-icons.github.io/react-icons/) を使っています。
