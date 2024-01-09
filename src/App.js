@@ -1,8 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { Container, Button} from 'react-bootstrap';
+import { BsTwitterX, BsGithub, BsVectorPen, BsRobot } from "react-icons/bs";
 import './App.css';
-import Button from 'react-bootstrap/Button';
-import Container from 'react-bootstrap/Container';
-import 'bootstrap-icons/font/bootstrap-icons.css';
 
 const Title = () => (
   <>
@@ -20,27 +19,33 @@ const Footer = () => (
     </div>
   </>
   );
-  
+
+const icons = {
+  BsTwitterX: BsTwitterX,
+  BsGithub: BsGithub,
+  BsVectorPen: BsVectorPen,
+  BsRobot: BsRobot,
+};
 
 const ListLinks = () => {
   const links = [
-    { id: 0, title: "@xiPJ", at: "X/Twitter", url: "https://twitter.com/xiPJ", icon: "bi bi-twitter-x" },
-    { id: 1, title: "PiiJey", at: "GitHub", url: "https://github.com/piijey", icon: "bi bi-github" },
-    { id: 2, title: "アイソモカ", at: "はてなブログ", url: "https://isomocha.hatenablog.com", icon: "bi bi-vector-pen" },
+    { id: 0, title: "@xiPJ", at: "X/Twitter", url: "https://twitter.com/xiPJ", icon: "BsTwitterX" },
+    { id: 1, title: "PiiJey", at: "GitHub", url: "https://github.com/piijey", icon: "BsGithub" },
+    { id: 2, title: "アイソモカ", at: "はてなブログ", url: "https://isomocha.hatenablog.com", icon: "BsVectorPen" },
+    { id: 3, title: "DialDynamo", at: "GitHub", url: "https://piijey.github.io/chat/", icon: "BsRobot" },
   ];
-  
-  const listLinks = links.map(link =>
-    <div key={link.id}>
-      <a className="icon-link" href={link.url} rel="me">
-        <i className={link.icon}/>{link.title}
-      </a>
-    </div>
+
+  const listLinks = links.map(link => {
+    const IconComponent = icons[link.icon];
+    return (
+      <div key={link.id}>
+        <a className="icon-link" href={link.url} rel="me">
+          <IconComponent/>{link.title}
+        </a>
+      </div>
     );
-  return (
-    <>
-        {listLinks}
-    </>
-  );
+  });
+  return (<> {listLinks} </>);
 }
 
 function SoundButton() {
@@ -75,13 +80,16 @@ function SoundButton() {
 
 
 function Square({value, onSquareClick}) {
-  const colors = ['transparent', '#FBBE30', '#3CA69B', '#C72C65']
+  const colors = ['transparent', '#FBBE30', '#3CA69B', '#C72C65'];
+  const colorNames = ['クリア', '黄', '青', '赤']; 
   const bgColor = colors[value] || 'transparent';
+  const colorName = colorNames[value] || 'クリア';
   return (
   <button
   onClick={onSquareClick}
   className="btn rounded-0"
-  style={{backgroundColor: bgColor, width: '50px', height: '50px'}}>
+  style={{backgroundColor: bgColor, width: '50px', height: '50px'}}
+  aria-label={`色: ${colorName}`}>
     {}
   </button>
   );
@@ -112,7 +120,7 @@ function Board(){
 
   useEffect(() => {
     const changedIndex = hasBoardChanged()
-    if (changedIndex != -1){
+    if (changedIndex !== -1){
       clearAligned(changedIndex);
     }
     prevSquareRef.current = squares;
@@ -164,7 +172,7 @@ function Board(){
     const nextSquares = squares.slice();
     for (let i = 0; i<linesToCheck.length; i++) {
       const [a, b, c] = linesToCheck[i];
-      if (squares[a] != 0 && squares[a] === squares[b] && squares[a] === squares[c] ) {
+      if (squares[a] !== 0 && squares[a] === squares[b] && squares[a] === squares[c] ) {
         detected = true;
         nextSquares[a] = 0;
         nextSquares[b] = 0;
@@ -190,7 +198,7 @@ function Board(){
       ))}
     </div>
     <p className="caption">
-      {playAudio ? "おめでとう！" : "カラータイルをクリック！"}<br/>
+      {playAudio ? "おめでとう！" : "カラータイルをクリックして、色を揃えてね！"}<br/>
       クリックした回数: {clickTime}
     </p>
   </>
