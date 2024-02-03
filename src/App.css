@@ -1,37 +1,62 @@
+body {
+  background-color: #282d34;
+  color: #cedbeb;
+}
+
+h1 {
+  font-family: 'Monomaniac One', sans-serif;
+  font-size: 64px;
+}
+
+h2 {
+  font-family: 'Monomaniac One', sans-serif;
+  font-size: 40px;
+}
+
+
 .app {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  width: 100vw;
   height: 100vh; /* コンテナが画面の高さ全体を使用する */
   text-align: center; /* テキストを中央揃えに */
 }
 
-.header {
-  margin-bottom: 20px; /* ヘッダーの下の余白を調整 */
+.title {
+  margin: 5px 0 0px 0;
 }
 
-.game {
+.card {
+  background-color: #cedbeb;
+  min-width: 20rem;
+}
+
+.card-header {
+  margin: 0;
+  padding: 0;
+}
+
+.game-board {
   background-image: url('./icon.png'); /* 背景画像 */
   background-size: cover; /* 画像のサイズ調整 */
-  width: 150px; /* コンテナの幅 */
-  height: 150px; /* コンテナの高さ */
+  width: 150px; /* ボードの幅 */
+  height: 150px; /* ボードの高さ */
   margin: 0 auto;
-  margin-bottom: 40px;
+  margin-top: 5px;
+  margin-bottom: 5px;
 }
 
-.caption {
-  font-size: x-small;
+.game-caption {
+  font-size: small;
   margin-bottom: 0;
 }
 
 .cc {
   font-size: x-small;
-  margin-bottom: 0;
+  margin: 0;
 }
 
 .footer {
-  margin-top: 20px;
-  font-size: small;
-  margin-bottom: 0;
+  margin: 0 0 5px 0;
 }
