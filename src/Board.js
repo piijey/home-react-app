@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
+import { RiMusicFill } from "react-icons/ri";
 
 export const useBoard = () => {
     function Square({value, onSquareClick}) {
@@ -57,6 +58,7 @@ export const useBoard = () => {
         useEffect(() => {
           if (playAudio) {
             let audio = new Audio('./sound/269198__mickleness__game-win.mp3');
+            audio.volume = 0.1;
             audio.play();
             audio.onended = () => {
               setSquares(initSquares())
@@ -122,7 +124,8 @@ export const useBoard = () => {
           </div>
           <div className="game-caption">
             {playAudio ? "おめでとう！" : "カラータイルをクリックして、色を揃えてね！"}<br/>
-            クリックした回数: {clickTime}
+            クリックした回数: {clickTime}<br/>
+            <div className="cc"><RiMusicFill /> <a href="https://freesound.org/people/mickleness/sounds/269198/">"game-win.mp3" by mickleness, Freesound</a></div>
           </div>
         </>
         )
