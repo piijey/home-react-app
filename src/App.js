@@ -49,6 +49,7 @@ const ListLinks = () => {
     { id: 0, title: "PiiJey", at: "GitHub", url: "https://github.com/piijey", icon: "BsGithub" },
     { id: 1, title: "@xiPJ", at: "X/Twitter", url: "https://twitter.com/xiPJ", icon: "BsTwitterX" },
     { id: 2, title: "@xipj.bsky.social", at: "Bluesky", url: "https://bsky.app/profile/xipj.bsky.social", icon: "PiButterfly" },
+    { id: 2.5, title: "Piijey - Qiita", at: "Qiita", url: "https://qiita.com/piijey", icon: "BsVectorPen"},
     { id: 3, title: "アイソモカ", at: "はてなブログ", url: "https://isomocha.hatenablog.com", icon: "BsVectorPen" },
     { id: 4, title: "じんかい収集指定場所", at: "Instagram", url: "https://www.instagram.com/53syusyu/", icon: "BsInstagram" },
     { id: 5, title: "しりとりぼっと", at: "しりとりアプリ", url: "https://piijey.github.io/shiritori/", icon: "RiRobot2Line" },
